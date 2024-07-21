@@ -1,14 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
+const helmet = require('helmet'); // Optional, for security
+
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://weathermeapp.netlify.app', 
+}));
 app.use(express.json());
+app.use(helmet()); // Optional, for security headers
+
 
 // MongoDB Connection
 const uri = process.env.MONGO_URI;
@@ -25,11 +31,17 @@ app.get('/', (req, res) => {
 });
 
 // Routes
-const weatherRoutes = require('./routes/weatherRoutes');
+const weatherRoutes = require('./routes/weatherRoutes'); // Adjust path as needed
 app.use('/api/weather', weatherRoutes);
 
 // Scheduler
-require('./tasks/weatherScheduler');  // Add this line to include the scheduler
+require('./tasks/weatherScheduler'); // Adjust path as needed
+
+// Global Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 // Start the server
 app.listen(port, () => {
