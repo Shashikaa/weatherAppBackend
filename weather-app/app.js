@@ -6,7 +6,7 @@ const helmet = require('helmet'); // Optional, for security
 
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 10000;
 
 // Middleware
 app.use(cors({
