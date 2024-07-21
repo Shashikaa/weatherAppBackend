@@ -26,9 +26,6 @@ mongoose.connect(uri, {
 .catch(err => console.error('MongoDB connection error:', err));
 
 // Example route
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 // Routes
 const weatherRoutes = require('./routes/weatherRoutes'); // Adjust path as needed
