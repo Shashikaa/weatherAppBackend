@@ -1,20 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables from .env file
-const helmet = require('helmet'); // Optional, for security
-
+require('dotenv').config();
+const helmet = require('helmet');
 
 const app = express();
-const port = process.env.PORT || 10000;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: 'https://weathermeapp.netlify.app', 
+  origin: 'https://weathermeapp.netlify.app',
 }));
 app.use(express.json());
-app.use(helmet()); // Optional, for security headers
-
+app.use(helmet());
 
 // MongoDB Connection
 const uri = process.env.MONGO_URI;
@@ -22,17 +20,15 @@ mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
-
-// Example route
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
-const weatherRoutes = require('./routes/weatherRoutes'); // Adjust path as needed
+const weatherRoutes = require('./routes/weatherRoutes');
 app.use('/api/weather', weatherRoutes);
 
 // Scheduler
-require('./tasks/weatherScheduler'); // Adjust path as needed
+require('./tasks/weatherScheduler');
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
